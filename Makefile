@@ -6,6 +6,10 @@ export
 
 .PHONY: help setup deploy nginx
 
+help: ## Show this help message
+	@printf "Targets:\n"
+	@awk 'BEGIN {FS = ":.*##"; OFS = ""} /^[a-zA-Z0-9_-]+:.*##/ {printf "  %-12s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
 ##@ Initial Setup
 setup: ## Setup VPS for initial deployment (Podman + Nginx deps)
 	@echo "🔧 Setting up VPS..."

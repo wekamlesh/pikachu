@@ -1,12 +1,35 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 ENV_FILE=".env"
 COMPOSE_DIR="podman"
 COMPOSE_FILE="${COMPOSE_DIR}/compose.yml"
+REQUIRED_VARS=(
+  BASE_DOMAIN
+  N8N_USER
+  N8N_PASSWORD
+  N8N_ENCRYPTION_KEY
+  N8N_WEBHOOK_URL
+  REDIS_PASSWORD
+  AVIAN_POSTGRES_HOST
+  AVIAN_POSTGRES_PORT
+  AVIAN_POSTGRES_DB
+  AVIAN_POSTGRES_USER
+  AVIAN_POSTGRES_PASSWORD
+  AVIAN_POSTGRES_SSL
+  AVIAN_POSTGRES_SSL_MODE
+  AVIAN_POSTGRES_SSL_REJECT_UNAUTHORIZED
+)
 
 echo "🚀 Deploying n8n stack"
 echo "======================"
+
+require_cmd() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "❌ $1 not found. $2"
+    exit 1
+  fi
+}
 
 if [[ ! -f "${ENV_FILE}" ]]; then
   echo "❌ .env file not found"
@@ -18,15 +41,29 @@ if [[ ! -f "${COMPOSE_FILE}" ]]; then
   exit 1
 fi
 
-if ! command -v podman-compose >/dev/null 2>&1; then
-  echo "❌ podman-compose not found. Run: make setup"
-  exit 1
-fi
+require_cmd podman "Install Podman (make setup)."
+require_cmd podman-compose "Install podman-compose (make setup)."
+require_cmd curl "Install curl (apt install curl)."
+
+validate_env() {
+  local missing=()
+  for var in "${REQUIRED_VARS[@]}"; do
+    if [[ -z "${!var:-}" ]]; then
+      missing+=("$var")
+    fi
+  done
+
+  if ((${#missing[@]})); then
+    echo "❌ Missing required values in .env: ${missing[*]}"
+    exit 1
+  fi
+}
 
 set -a
 source "${ENV_FILE}"
 set +a
 echo "✅ Environment loaded"
+validate_env
 
 SERVICES="redis n8n"
 
