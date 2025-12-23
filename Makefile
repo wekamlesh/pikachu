@@ -1,19 +1,22 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-# Load environment variables
 -include .env
 export
 
-.PHONY: help setup
+.PHONY: help setup deploy nginx
 
 ##@ Initial Setup
-
-setup: ## Setup VPS for initial deployment
+setup: ## Setup VPS for initial deployment (Podman + Nginx deps)
 	@echo "🔧 Setting up VPS..."
 	@./scripts/setup-vps.sh
 
-## Deploy 
-deploy: ## Deploy n8n stack (auto-detects caddy)
+##@ Deploy
+deploy: ## Deploy n8n stack
 	@echo "🚀 Deploying..."
 	@./scripts/deploy.sh
+
+##@ Nginx
+nginx: ## Configure Nginx reverse proxy + HTTPS for n8n
+	@echo "🌐 Configuring Nginx..."
+	@./scripts/setup-nginx.sh
