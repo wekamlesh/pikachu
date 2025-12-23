@@ -1,0 +1,65 @@
+########################################
+# Secrets & environment
+########################################
+
+.env
+.env.*
+!.env.example
+
+########################################
+# Runtime data (never commit)
+########################################
+
+# n8n / app data
+n8n-data/
+*.sqlite
+*.db
+
+# Redis / local state
+redis-data/
+
+# Backups (can be huge + sensitive)
+backups/
+
+########################################
+# Logs
+########################################
+
+logs/
+*.log
+
+########################################
+# Temporary / generated files
+########################################
+
+tmp/
+.cache/
+*.tmp
+
+########################################
+# OS & editor noise
+########################################
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+########################################
+# Node / tooling leftovers (safety net)
+########################################
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+########################################
+# Container / runtime artifacts
+########################################
+
+# Podman / Docker generated files
+podman/*.pid
+podman/*.lock
