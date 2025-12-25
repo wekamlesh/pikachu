@@ -1,4 +1,3 @@
-```markdown
 # 🚀 n8n Podman Stack
 
 Production-ready setup for running **n8n** on a VPS using **Podman + podman-compose**, **Redis** (queue/cache), **external PostgreSQL** (e.g. Aiven), **Nginx** on the host, and **automated backups to pCloud**.
