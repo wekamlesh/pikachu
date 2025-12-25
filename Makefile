@@ -24,3 +24,8 @@ deploy: ## Deploy n8n stack
 nginx: ## Configure Nginx reverse proxy + HTTPS for n8n
 	@echo "🌐 Configuring Nginx..."
 	@./scripts/setup-nginx.sh
+
+##@ Backup
+backup: ## Configure Nginx reverse proxy + HTTPS for n8n
+	@echo "🌐 Run the backup..."
+	@./scripts/backup.sh
